@@ -1,0 +1,25 @@
+(function($) {
+	$.fn.jqmModal = function() {
+		var id = "modal-"+$(this).attr("id");;
+		return this.each(function() {
+			
+			$(this).attr("id", id);
+			
+			$("#columnaCentral" ).append($(this));
+			
+			$("#"+id).jqm({modal: true});
+			
+		});
+	};
+})(jQuery);
+
+function jqmShowModal(id) {
+	id = "modal-"+id;
+	$("#"+id).jqmShow();
+};
+
+function jqmHideModal(id) {
+	id = "modal-"+id;
+	$("#"+id).jqmHide();
+	$(".jqmOverlay").remove();
+};

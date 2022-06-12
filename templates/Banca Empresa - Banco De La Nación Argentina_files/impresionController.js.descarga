@@ -1,0 +1,41 @@
+/*BEE-4820*/
+if(document.getElementById("logoImprimir")){
+}else{
+	$(document).ready(function() {
+		$("#header").append("<div id='logoImprimir' style='display:none;'><img src='banco/producto/imagenes/common/logos/logo_impresion.png' /></div>");
+	});
+}
+/*Fin 4820*/
+
+function habilitarCSSImpresion( nombreArchivo){		
+		var linkCSS = $('#columnaCentral link[media="print"][href="banco/producto/css/'+nombreArchivo+ '"]');
+		
+		if (linkCSS.length == 0){
+			var index = 0;
+			var link = $('#columnaCentral link:eq(' + index + ')');
+			
+			while ( link.length > 0) {
+				index++;
+				link = $('#columnaCentral link:eq(' + index + ')');				
+			}						
+			
+			var lastLink = $('#columnaCentral link:eq(' + (index-1) + ')');			
+			$("<link>").insertAfter($(lastLink));
+						
+			var css = $('#columnaCentral link:eq(' + index + ')');
+		    var href = "banco/producto/css/"+nombreArchivo;
+		    css.attr({
+		      rel:  "stylesheet",
+		      type: "text/css",
+		      media: "print",
+		      href: href
+		    });
+		}
+	};
+	
+	function deshabilitarCSSImpresion( nombreArchivo){
+		var linkCSS = $('#columnaCentral link[media="print"][href="banco/producto/css/'+nombreArchivo+'"]');
+		if (linkCSS.length > 0){
+			linkCSS.remove();
+		}
+	};

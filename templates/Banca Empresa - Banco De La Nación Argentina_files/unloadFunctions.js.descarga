@@ -1,0 +1,24 @@
+var logOutFlag = false;
+
+function loadUnloadFunction(url){
+		$(window).unload(function(){
+			if(!logOutFlag) {
+		 		unloadUser(url);
+		 	} else  {
+		 		logOutFlag = false;
+		 	}
+		});
+}
+		
+function unloadUser(url){
+	if($.browser.webkit){
+		$.ajax({ "url": url, "async": false, "type": "POST", "data": null, "dataType": "json", success:	function(){},	error: function(){} });
+	}else{
+		ajaxController.postHTML(url);
+	}
+}
+
+function setLogoutFlag() {
+	logOutFlag = true;
+	return true;
+}

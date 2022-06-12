@@ -1,0 +1,108 @@
+
+function createDatePicker(inputs, formatoFecha, fechaMinima, fechaMaxima, feriados, conFinDeSemana){
+	createDatePicker2(inputs, formatoFecha, fechaMinima, fechaMaxima, feriados, conFinDeSemana,0);
+} 
+
+
+function createDatePicker2(inputs, formatoFecha, fechaMinima, fechaMaxima, feriados, conFinDeSemana,firstDay) {
+
+		      	 /* 
+			    inputs el id de/los imputs entre comillas dobles separados por coma  ej. = "#datepicker1, #datepicker2"  
+		            formatoFecha un formato entre comillas simples ej. = 'dd/mm/yy'  
+		            fechaMinima null (no se restringe fecha), default (calcula 2 meses) o numerico ej. = 'default'
+  		            fechaMaxima null o un valor numerico ej. = -1
+			        feriados un arreglo de fechas
+			*/
+								
+		$( inputs ).datepicker({
+			showOn: "button",
+			buttonImage: "banco/producto/imagenes/common/icons/ico_calendario.gif",
+			buttonImageOnly: true, 
+			defaultDate: "+1d",
+			numberOfMonths: 1,
+			firstDay: firstDay,
+			changeMonth: true,
+			changeYear: true,
+			dateFormat: formatoFecha,
+			minDate: calcularMinDate(fechaMinima),
+			maxDate: (fechaMaxima == null) ? null : fechaMaxima,
+			beforeShowDay: DisableDays
+		});
+		//$.datepicker.setDefaults( $.datepicker.regional[ "es" ] );
+		
+		function calcularMinDate(fechaMinima){
+			if (fechaMinima == 'default') {
+				return calcularDefaultMinDate();	
+			}else{
+				return fechaMinima;
+			}
+		}
+
+		function calcularDefaultMinDate(){ 
+		   	var resultado;
+			var ahora = new Date() ;
+			var valorMes = ahora.getMonth() + 1;
+			var valorDia = ahora.getDate();
+			switch(valorMes)
+				{
+				case 1:
+				 resultado = (valorDia + 30 + 31 - 1) * ( - 1)
+		   		  break;
+				case 2:
+				 resultado = (valorDia + 31 + 31 - 1) * ( - 1)
+				  break;
+				case 3:
+				 resultado = (valorDia + 31 + 28 - 1) * ( - 1)
+				  break;
+				case 4:
+				 resultado = (valorDia + 28 + 31 - 1) * ( - 1)
+				  break;
+				case 5:
+				 resultado = (valorDia + 31 + 30 - 1) * ( - 1)
+				  break;
+				case 6:
+				 resultado = (valorDia + 30 + 31 - 1) * ( - 1) 
+				  break;
+				case 7:
+				 resultado = (valorDia + 31 + 30 - 1) * ( - 1) 
+				  break;
+				case 8:
+				 resultado = (valorDia + 30 + 31 - 1) * ( - 1)
+				  break;
+				case 9:
+				 resultado = (valorDia + 31 + 31 - 1) * ( - 1) 
+				  break;
+				case 10:
+				 resultado = (valorDia + 31 + 30 - 1) * ( - 1) 
+				  break;
+				case 11:
+				 resultado = (valorDia + 30 + 31 - 1) * ( - 1) 
+				  break;
+				case 12:
+				 resultado = (valorDia + 31 + 30 - 1) * ( - 1) 
+				  break;
+				default:
+				  
+				}
+
+		   	return resultado 
+		};
+		
+		function DisableDays(date) {
+			var d = date.getDate();
+			var m = date.getMonth() + 1;
+			var y = date.getFullYear();
+
+			for (var i = 0; i < feriados.length; i++) {
+				if (feriados[i] == d + "/" + m + "/" + y) {
+					return [false];
+				}
+			}
+			
+			if(conFinDeSemana == undefined || conFinDeSemana == false){
+				return $.datepicker.noWeekends(date);
+			}
+			
+			return [true]; 
+		}
+	}
